@@ -76,7 +76,7 @@ public class LuaTableStubType extends LuaStubElementType<LuaTableStub, LuaTableC
         if (hasType)
         {
             int len = dataStream.readVarInt();
-            if (len < 0) ((SerializationManagerEx) SerializationManagerEx.getInstance()).repairNameStorage();
+            if (len < 0) (SerializationManagerEx.getInstanceEx()).repairNameStorage(null);
 
             if (len <= 0) {
                 return new LuaTableStubImpl(parentStub);

@@ -38,7 +38,7 @@ public abstract class LuaItemPresentation implements ItemPresentation {
 
   @Nullable
     public Icon getIcon(boolean open) {
-    return  myElement.getIcon(Iconable.ICON_FLAG_OPEN);
+    return  myElement.getIcon(Iconable.ICON_FLAG_VISIBILITY);
   }
 
   @Nullable

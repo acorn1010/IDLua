@@ -85,9 +85,9 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
     }
 
     @Override
-    public boolean submit(@NotNull IdeaLoggingEvent[] events, @Nullable String additionalInfo,
-                          @NotNull Component parentComponent, @NotNull Consumer<SubmittedReportInfo> consumer) {
-        return submit(events, additionalInfo, "<anonymous>", parentComponent, consumer);
+    public boolean submit(IdeaLoggingEvent @NotNull [] events, @Nullable String additionalInfo,
+                          @NotNull Component parentComponent, @NotNull Consumer<? super SubmittedReportInfo> consumer) {
+        return submit(events, additionalInfo, "<anonymous>", parentComponent, (Consumer<SubmittedReportInfo>) consumer);
     }
 
     private boolean submit(IdeaLoggingEvent[] ideaLoggingEvents, String description, String user,
