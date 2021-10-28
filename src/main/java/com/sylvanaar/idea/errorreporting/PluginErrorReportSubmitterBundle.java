@@ -17,7 +17,7 @@
  */
 package com.sylvanaar.idea.errorreporting;
 
-import com.intellij.CommonBundle;
+import com.intellij.AbstractBundle;
 import org.jetbrains.annotations.PropertyKey;
 
 import java.util.ResourceBundle;
@@ -35,6 +35,6 @@ public class PluginErrorReportSubmitterBundle {
 
     public static String message(@PropertyKey(resourceBundle = "com.sylvanaar.idea.errorreporting.PluginErrorReportSubmitterBundle") String key,
                                  Object... params) {
-        return CommonBundle.message(OUR_BUNDLE, key, params);
+        return AbstractBundle.message(OUR_BUNDLE, key, params);
     }
 }

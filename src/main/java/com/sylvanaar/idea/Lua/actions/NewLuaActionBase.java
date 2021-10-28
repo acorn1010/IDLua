@@ -36,6 +36,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.util.*;
+import java.util.function.Consumer;
 
 
 /**
@@ -49,17 +50,6 @@ abstract class NewLuaActionBase extends CreateElementActionBase {
 
     public NewLuaActionBase(String text, String description, Icon icon) {
         super(text, description, icon);
-    }
-
-    @NotNull
-    protected final PsiElement[] invokeDialog(final Project project, final PsiDirectory directory) {
-        log.debug("invokeDialog");
-        final MyInputValidator validator = new MyInputValidator(project, directory);
-        Messages.showInputDialog(project, getDialogPrompt(), getDialogTitle(), Messages.getQuestionIcon(), "", validator);
-
-        final PsiElement[] elements = validator.getCreatedElements();
-        log.debug("Result: " + Arrays.toString(elements));
-        return elements;
     }
 
     public void update(final AnActionEvent event) {

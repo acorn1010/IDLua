@@ -17,6 +17,7 @@
 package com.sylvanaar.idea.Lua.actions;
 
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.util.NlsContexts;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -48,10 +49,7 @@ public class NewLuaFileAction extends NewLuaActionBase {
         return LuaBundle.message("newfile.dialog.title");
     }
 
-    protected String getCommandName() {
-        return LuaBundle.message("newfile.command.name");
-    }
-
+    @NlsContexts.Command
     protected String getActionName(PsiDirectory directory, String newName) {
         return LuaBundle.message("newfile.menu.action.text");
     }

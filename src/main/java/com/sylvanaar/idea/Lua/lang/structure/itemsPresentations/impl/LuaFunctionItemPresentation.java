@@ -30,24 +30,15 @@ import javax.swing.*;
 
 public class LuaFunctionItemPresentation extends LuaItemPresentation {
 
-    private final NotNullLazyValue<String> myPresentableText = new NotNullLazyValue<String>() {
+    private final NotNullLazyValue<String> myPresentableText = NotNullLazyValue.lazy(() -> {
+        return LuaElementPresentation.
+                getFunctionPresentableText(((LuaFunctionDefinition) myElement));
+    });
 
-        @NotNull
-        @Override
-        protected String compute() {
-            return LuaElementPresentation.
-                    getFunctionPresentableText(((LuaFunctionDefinition) myElement));
-        }
-    };
+    private final NotNullLazyValue<String> myLocationText = NotNullLazyValue.lazy(() -> {
+        return LuaElementPresentation.getFunctionLocationText(((LuaFunctionDefinition) myElement));
+    });
 
-    private final NotNullLazyValue<String> myLocationText = new NotNullLazyValue<String>() {
-        @NotNull
-        @Override
-        protected String compute() {
-            return LuaElementPresentation.
-                    getFunctionLocationText(((LuaFunctionDefinition) myElement));
-        }
-    };
     TextAttributesKey textKey =
             TextAttributesKey.createTextAttributesKey(LuaFunctionItemPresentation.class.toString());
 
