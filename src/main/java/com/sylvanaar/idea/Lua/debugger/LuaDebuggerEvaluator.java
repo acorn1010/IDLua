@@ -57,17 +57,17 @@ public class LuaDebuggerEvaluator extends XDebuggerEvaluator {
                          @Nullable XSourcePosition expressionPosition) {
         log.debug("evaluating: " + expression);
         Promise<LuaDebugValue> promise = myController.execute("return " + expression);
-        promise.done(callback::evaluated);
+        promise.onSuccess(callback::evaluated);
     }
 
     @Override
     public void evaluate(@NotNull XExpression expression, @NotNull XEvaluationCallback callback, @Nullable XSourcePosition expressionPosition) {
         if (expression.getMode() == EvaluationMode.EXPRESSION) {
             Promise<LuaDebugValue> promise = myController.execute("return " + expression.getExpression());
-            promise.done(callback::evaluated);
+            promise.onSuccess(callback::evaluated);
         } else {
             Promise<LuaDebugValue> promise = myController.execute(expression.getExpression());
-            promise.done(callback::evaluated);
+            promise.onSuccess(callback::evaluated);
         }
     }
 

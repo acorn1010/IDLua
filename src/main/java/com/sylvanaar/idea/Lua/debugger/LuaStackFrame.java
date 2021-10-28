@@ -73,7 +73,7 @@ public class LuaStackFrame extends XStackFrame {
         Promise<LuaRemoteStack> stack = myController.variables();
         if (stack == null) return;
         final XCompositeNode compositeNode = node;
-        stack.done(stack1 -> {
+        stack.onSuccess(stack1 -> {
             final XValueChildrenList xValues = new XValueChildrenList();
 
             final List<LuaDebugVariable> locals = stack1.getLocals(myIndex);

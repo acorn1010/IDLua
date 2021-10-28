@@ -24,7 +24,8 @@ dependencies {
 }
 
 compileJava {
-    options.compilerArgs << '-Xlint:deprecation'
+    options.compilerArgs << "-Xlint:deprecation" << "-Werror"
+//    options.compilerArgs << "-Xlint:deprecation"
 }
 
 idea {

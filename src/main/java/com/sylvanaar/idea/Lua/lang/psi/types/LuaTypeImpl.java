@@ -48,7 +48,7 @@ public abstract class LuaTypeImpl implements LuaType {
         if (input == null || input.length == 0)
             return LuaPrimitiveType.ANY;
 
-        ClassLoader classLoader = PluginManager.getPlugin(PluginId.getId("Lua")).getPluginClassLoader();
+        ClassLoader classLoader = PluginManagerCore.getPlugin(PluginId.getId("Lua")).getPluginClassLoader();
 
         Object result = LuaSerializationUtils.deserialize(input, classLoader);
 
@@ -56,7 +56,6 @@ public abstract class LuaTypeImpl implements LuaType {
 
         return (LuaType) result;
     }
-
 
     @Override
     public String encodingResult(Map<LuaType, String> encodingContext, String encoded) {

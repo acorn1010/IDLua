@@ -30,6 +30,7 @@ import org.luaj.vm2.LuaValue;
 
 import javax.swing.*;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Created by IntelliJ IDEA.
@@ -112,7 +113,7 @@ public class LuaDebugValue extends XValue {
                 }
             };
         }
-        return new XRegularValuePresentation(ObjectUtils.notNull(ObjectUtils.coalesce(Arrays.asList(stringValue, identityValue, ""))), myTypeName);
+        return new XRegularValuePresentation(Objects.requireNonNull(ObjectUtils.coalesce(Arrays.asList(stringValue, identityValue, ""))), myTypeName);
     }
 
     LuaValue getRawValue() {

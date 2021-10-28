@@ -282,7 +282,6 @@ public class LuaPsiFileImpl extends LuaPsiFileBaseImpl implements LuaPsiFile, Ps
         if (getStub() != null)
             return EMPTY_CONTROL_FLOW;
 
-
         return CachedValuesManager.getManager(getProject()).getCachedValue(this, CONTROL_FLOW,
                 new CachedValueProvider<Instruction[]>() {
                     @Override
@@ -293,7 +292,7 @@ public class LuaPsiFileImpl extends LuaPsiFileBaseImpl implements LuaPsiFile, Ps
                         if (value == null || value.length > MAX_CONTROL_FLOW_LEN)
                             value = EMPTY_CONTROL_FLOW;
 
-                        return Result.create(value, PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT);
+                        return Result.create(value, PsiModificationTracker.MODIFICATION_COUNT);
                     }
                 },
                 false);
