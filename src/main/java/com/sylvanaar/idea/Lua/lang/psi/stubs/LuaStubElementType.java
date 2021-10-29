@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
  * Date: 1/23/11
  * Time: 8:19 PM
  */
-public abstract class LuaStubElementType<S extends StubElement, T extends LuaPsiElement>
+public abstract class LuaStubElementType<S extends StubElement<? extends LuaPsiElement>, T extends LuaPsiElement>
         extends IStubElementType<S, T>  implements StubSerializer<S> {
 
     protected LuaStubElementType(@NonNls @NotNull String debugName) {

@@ -31,18 +31,6 @@ import org.jetbrains.annotations.NotNull;
  * @author ven
  */
 public class LuaParameterInfoHandler implements ParameterInfoHandler<LuaPsiElement, Object> {
-    public boolean couldShowInLookup() {
-        return true;
-    }
-
-    public Object[] getParametersForLookup(LookupElement item, ParameterInfoContext context) {
-        return null;
-    }
-
-    public Object[] getParametersForDocumentation(Object resolveResult, ParameterInfoContext context) {
-        return null;
-    }
-
     public LuaPsiElement findElementForParameterInfo(CreateParameterInfoContext context) {
         return findCall(context.getFile(), context.getOffset());
     }
@@ -100,21 +88,11 @@ public class LuaParameterInfoHandler implements ParameterInfoHandler<LuaPsiEleme
     public void updateParameterInfo(@NotNull LuaPsiElement place, UpdateParameterInfoContext context) {
     }
 
-    public String getParameterCloseChars() {
-        return ",){}\t";
-    }
-
-    public boolean tracksParameterIndex() {
-        return false;
-    }
-
     public void updateUI(Object o, ParameterInfoUIContext context) {
         int highlightStartOffset = -1;
         int highlightEndOffset = -1;
 
         StringBuilder buffer = new StringBuilder();
-
-
         PsiElement owningElement = context.getParameterOwner();
 
         if (o instanceof LuaPsiElement)

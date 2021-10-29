@@ -34,6 +34,7 @@ import com.intellij.xdebugger.breakpoints.XBreakpointHandler;
 import com.intellij.xdebugger.evaluation.XDebuggerEditorsProvider;
 import com.intellij.xdebugger.evaluation.XDebuggerEvaluator;
 import com.intellij.xdebugger.frame.XStackFrame;
+import com.intellij.xdebugger.frame.XSuspendContext;
 import org.apache.commons.lang.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -76,17 +77,17 @@ public class LuaDebugProcess extends XDebugProcess {
     }
 
     @Override
-    public void startStepOver() {
+    public void startStepOver(@Nullable XSuspendContext context) {
         controller.stepOver();
     }
 
     @Override
-    public void startStepInto() {
+    public void startStepInto(@Nullable XSuspendContext context) {
         controller.stepInto();
     }
 
     @Override
-    public void startStepOut() {
+    public void startStepOut(@Nullable XSuspendContext context) {
         controller.stepOut();
     }
 
@@ -100,12 +101,12 @@ public class LuaDebugProcess extends XDebugProcess {
     }
 
     @Override
-    public void resume() {
+    public void resume(@Nullable XSuspendContext context) {
         controller.resume();
     }
 
     @Override
-    public void runToPosition(@NotNull XSourcePosition position) {
+    public void runToPosition(@NotNull XSourcePosition position, @Nullable XSuspendContext context) {
         throw new NotImplementedException();
     }
 

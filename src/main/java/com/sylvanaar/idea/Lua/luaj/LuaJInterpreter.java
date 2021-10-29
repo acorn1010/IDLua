@@ -21,7 +21,9 @@ import com.intellij.ide.ui.LafManagerListener;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.ui.JBColor;
+import com.intellij.util.messages.Topic;
 import com.intellij.util.ui.UIUtil;
+import com.jediterm.terminal.Terminal;
 import jsyntaxpane.lexers.LuaLexer;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaError;
@@ -139,14 +141,15 @@ public class LuaJInterpreter extends JPanel {
             }
         });
 
+        TerminalLafManagerListener listener = new TerminalLafManagerListener();
+        ApplicationManager.getApplication().getMessageBus().connect().subscribe(listener.TOPIC, listener);
+
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent componentEvent) {
                 inputTerminal.requestFocus();
             }
         });
-
-        LafManager.getInstance().addLafManagerListener(new TerminalLafManagerListener());
     }
 
     private static String withNewline(String text) {
@@ -223,12 +226,18 @@ public class LuaJInterpreter extends JPanel {
     }
 
     private class TerminalLafManagerListener implements LafManagerListener {
+        @Topic.AppLevel
+        public final Topic<TerminalLafManagerListener> TOPIC = new Topic<>(
+                TerminalLafManagerListener.class,
+                Topic.BroadcastDirection.NONE
+        );
 
         @Override
         public void lookAndFeelChanged(LafManager source) {
-            final Color background = UIUtil.isUnderDarcula()
-                    ? JBColor.background()
-                    : JBColor.black;
+//            final Color background = UIUtil.isUnderDarcula()
+//                    ? JBColor.background()
+//                    : JBColor.black;
+            final Color background = JBColor.black;
 
             inputTerminal.setBackground(background);
             // TODO: Upstream fix for Kahlua

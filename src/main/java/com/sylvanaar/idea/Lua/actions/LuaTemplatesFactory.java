@@ -52,11 +52,13 @@ public class LuaTemplatesFactory  {
                                            @NonNls String... parameters) throws IncorrectOperationException {
         log.debug("createFromTemplate: dir:" + directory + ", filename: " + fileName);
 
-        final FileTemplate template = FileTemplateManager.getInstance().getTemplate(templateName);
-
-        Properties properties = new Properties(FileTemplateManager.getInstance().getDefaultProperties());
-
         Project project = directory.getProject();
+
+        final FileTemplate template = FileTemplateManager.getInstance(project).getTemplate(templateName);
+
+        Properties properties = new Properties(FileTemplateManager.getInstance(project).getDefaultProperties());
+
+
         properties.setProperty("PROJECT_NAME", project.getName());
         properties.setProperty("NAME", fileName);
 
@@ -67,7 +69,7 @@ public class LuaTemplatesFactory  {
             text = template.getText(properties);
         } catch (Exception e) {
             throw new RuntimeException("Unable to load template for " +
-                                       FileTemplateManager.getInstance().internalTemplateToSubject(templateName), e);
+                                       FileTemplateManager.getInstance(project).internalTemplateToSubject(templateName), e);
         }
 
         final PsiFileFactory factory = PsiFileFactory.getInstance(directory.getProject());

@@ -23,7 +23,10 @@ import com.intellij.ide.BrowserUtil;
 import com.intellij.ide.DataManager;
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
+import com.intellij.ide.plugins.PluginManagerCore;
+import com.intellij.ide.plugins.PluginUtil;
 import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -85,9 +88,9 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
     }
 
     @Override
-    public boolean submit(@NotNull IdeaLoggingEvent[] events, @Nullable String additionalInfo,
-                          @NotNull Component parentComponent, @NotNull Consumer<SubmittedReportInfo> consumer) {
-        return submit(events, additionalInfo, "<anonymous>", parentComponent, consumer);
+    public boolean submit(IdeaLoggingEvent @NotNull [] events, @Nullable String additionalInfo,
+                          @NotNull Component parentComponent, @NotNull Consumer<? super SubmittedReportInfo> consumer) {
+        return submit(events, additionalInfo, "<anonymous>", parentComponent, (Consumer<SubmittedReportInfo>) consumer);
     }
 
     private boolean submit(IdeaLoggingEvent[] ideaLoggingEvents, String description, String user,
@@ -126,9 +129,9 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
 
         Throwable t = ideaLoggingEvent.getThrowable();
         if (t != null) {
-            final PluginId pluginId = IdeErrorsDialog.findPluginId(t);
+            final PluginId pluginId = PluginUtil.getInstance().findPluginId(t);
             if (pluginId != null) {
-                final IdeaPluginDescriptor ideaPluginDescriptor = PluginManager.getPlugin(pluginId);
+                final IdeaPluginDescriptor ideaPluginDescriptor = PluginManagerCore.getPlugin(pluginId);
                 if (ideaPluginDescriptor != null && !ideaPluginDescriptor.isBundled()) {
                     descBuilder.append("Plugin ").append(ideaPluginDescriptor.getName()).append(" version: ").append
                             (ideaPluginDescriptor.getVersion()).append("\n");
@@ -403,8 +406,11 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
                         notification.expire();
                     }
                 } : null;
-                ReportMessages.GROUP.createNotification(ReportMessages.ERROR_REPORT, text.toString(), type,
-                        listener).notify(project);
+                NotificationGroupManager.getInstance().getNotificationGroup("Error Report").createNotification(
+                        DiagnosticBundle.message("error.report.title"),
+                        text.toString(),
+                        type
+                ).setListener(listener).notify(project);
             }
         });
     }

@@ -112,12 +112,14 @@ public class LuaSmartEnterProcessor extends SmartEnterProcessorWithFixers {
     if (CharArrayUtil.regionMatches(chars, caretOffset - "end".length(), "end") ||
             CharArrayUtil.regionMatches(chars, caretOffset - "\nend".length(), "\nend")) {
       commit(editor);
-      final CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(file.getProject());
-      final boolean old = settings.KEEP_SIMPLE_BLOCKS_IN_ONE_LINE;
-      settings.KEEP_SIMPLE_BLOCKS_IN_ONE_LINE = false;
+      // Following code is legacy system, don't know yet if it's still necessary or if we can remove this.
+      //
+//      final CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(file.getProject());
+//      final boolean old = settings.KEEP_SIMPLE_BLOCKS_IN_ONE_LINE;
+//      settings.KEEP_SIMPLE_BLOCKS_IN_ONE_LINE = false;
       PsiElement elt = PsiTreeUtil.getParentOfType(file.findElementAt(caretOffset - 4), LuaBlock.class, false);
       reformat(elt);
-      settings.KEEP_SIMPLE_BLOCKS_IN_ONE_LINE = old;
+//      settings.KEEP_SIMPLE_BLOCKS_IN_ONE_LINE = old;
       editor.getCaretModel().moveToOffset(caretOffset - 4);
     }
   }

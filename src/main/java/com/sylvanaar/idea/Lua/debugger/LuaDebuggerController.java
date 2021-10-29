@@ -125,7 +125,7 @@ public class LuaDebuggerController {
             workingDir = ((LuaRunConfiguration) profile).getWorkingDirectory();
         }
         if(StringUtil.isEmpty(workingDir)) {
-            workingDir = myProject.getBaseDir().getPath();
+            workingDir = myProject.getBasePath();
         }
         if(!workingDir.endsWith("/")) workingDir += "/";
 

@@ -21,6 +21,7 @@ import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.AsyncResult;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.xdebugger.XDebugSession;
@@ -32,6 +33,7 @@ import com.sylvanaar.idea.Lua.lang.psi.statements.LuaBlock;
 import com.sylvanaar.idea.Lua.lang.psi.symbols.LuaLocalDeclaration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.concurrency.Promise;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 
@@ -82,69 +84,75 @@ public class LuaDebugVariable extends XNamedValue {
     @Override
     public void computeSourcePosition(@NotNull XNavigatable navigatable) {
         final DataManager dataManager = DataManager.getInstance();
-        final DataContext dataContext = dataManager != null ? dataManager.getDataContext() : null;
-        final Project project;
-        if (dataContext != null) {
-            project = PlatformDataKeys.PROJECT.getData(dataContext);
-        } else {
-            super.computeSourcePosition(navigatable);
-            return;
-        }
 
-        XDebugSession debugSession = null;
-        if (project != null) {
-            debugSession = XDebuggerManager.getInstance(project).getCurrentSession();
-        }
-        XSourcePosition currentPosition = null;
+        if (dataManager != null) {
+            Promise<DataContext> dataContextFromFocus = dataManager.getDataContextFromFocusAsync();
 
-        if (debugSession != null) {
-            currentPosition = debugSession.getCurrentPosition();
-        }
-
-        if (currentPosition == null) return;
-
-        final PsiElement contextElement = XDebuggerUtil.getInstance().findContextElement(currentPosition.getFile(),
-                currentPosition.getOffset(), project, false);
-
-        if (contextElement == null) return;
-
-        LuaBlock block = PsiTreeUtil.getParentOfType(contextElement, LuaBlock.class);
-
-        if (!isLocal) {
-            block = PsiTreeUtil.getParentOfType(block, LuaBlock.class, true);
-        }
-
-        ArrayList<LuaLocalDeclaration> candidates = new ArrayList<>();
-
-        boolean found = false;
-
-        while (block != null && !found) {
-            for (LuaLocalDeclaration local : block.getLocals()) {
-                final String localName = local.getName();
-                if (localName != null && localName.equals(getName())) {
-                    candidates.add(local);
-                    found = true;
+            dataContextFromFocus.onSuccess(dataContext -> {
+                final Project project;
+                if (dataContext != null) {
+                    project = PlatformDataKeys.PROJECT.getData(dataContext);
+                } else {
+                    super.computeSourcePosition(navigatable);
+                    return;
                 }
-            }
 
-            block = PsiTreeUtil.getParentOfType(block, LuaBlock.class, true);
-        }
-
-
-        if (candidates.size() == 0) return;
-
-        LuaLocalDeclaration resolved = null;
-        for (LuaLocalDeclaration candidate : candidates) {
-            if (resolved == null) {
-                resolved = candidate;
-            } else {
-                if (candidate.getTextOffset() < contextElement.getTextOffset() && candidate.getTextOffset() > resolved.getTextOffset()) {
-                    resolved = candidate;
+                XDebugSession debugSession = null;
+                if (project != null) {
+                    debugSession = XDebuggerManager.getInstance(project).getCurrentSession();
                 }
-            }
-        }
+                XSourcePosition currentPosition = null;
 
-        navigatable.setSourcePosition(XDebuggerUtil.getInstance().createPositionByElement(resolved));
+                if (debugSession != null) {
+                    currentPosition = debugSession.getCurrentPosition();
+                }
+
+                if (currentPosition == null) return;
+
+                final PsiElement contextElement = XDebuggerUtil.getInstance().findContextElement(currentPosition.getFile(),
+                        currentPosition.getOffset(), project, false);
+
+                if (contextElement == null) return;
+
+                LuaBlock block = PsiTreeUtil.getParentOfType(contextElement, LuaBlock.class);
+
+                if (!isLocal) {
+                    block = PsiTreeUtil.getParentOfType(block, LuaBlock.class, true);
+                }
+
+                ArrayList<LuaLocalDeclaration> candidates = new ArrayList<>();
+
+                boolean found = false;
+
+                while (block != null && !found) {
+                    for (LuaLocalDeclaration local : block.getLocals()) {
+                        final String localName = local.getName();
+                        if (localName != null && localName.equals(getName())) {
+                            candidates.add(local);
+                            found = true;
+                        }
+                    }
+
+                    block = PsiTreeUtil.getParentOfType(block, LuaBlock.class, true);
+                }
+
+
+                if (candidates.size() == 0) return;
+
+                LuaLocalDeclaration resolved = null;
+                for (LuaLocalDeclaration candidate : candidates) {
+                    if (resolved == null) {
+                        resolved = candidate;
+                    } else {
+                        if (candidate.getTextOffset() < contextElement.getTextOffset() && candidate.getTextOffset() > resolved.getTextOffset()) {
+                            resolved = candidate;
+                        }
+                    }
+                }
+
+                navigatable.setSourcePosition(XDebuggerUtil.getInstance().createPositionByElement(resolved));
+            });
+        }
     }
 
     @Nullable

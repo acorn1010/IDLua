@@ -19,7 +19,7 @@ package com.sylvanaar.idea.Lua.util;
 import com.intellij.openapi.util.*;
 import org.jetbrains.annotations.*;
 
-public abstract class LuaAtomicNotNullLazyValue<T> extends NotNullLazyValue<T> {
+public abstract class LuaAtomicNotNullLazyValue<T> extends ClearableLazyValue<T> {
 
     private volatile T myValue;
 

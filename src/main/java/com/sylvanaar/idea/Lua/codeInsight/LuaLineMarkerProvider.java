@@ -27,7 +27,7 @@ import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.openapi.editor.markup.SeparatorPlacement;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
+import com.intellij.psi.*;
 import com.intellij.util.FunctionUtil;
 import com.intellij.util.NullableFunction;
 import com.sylvanaar.idea.Lua.LuaIcons;
@@ -36,11 +36,11 @@ import com.sylvanaar.idea.Lua.lang.luadoc.psi.api.LuaDocCommentOwner;
 import com.sylvanaar.idea.Lua.lang.psi.LuaFunctionDefinition;
 import com.sylvanaar.idea.Lua.lang.psi.statements.LuaReturnStatement;
 import com.sylvanaar.idea.Lua.options.LuaApplicationSettings;
+import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.MouseEvent;
-import java.util.Collection;
-import java.util.List;
+import java.util.function.Supplier;
 
 public class LuaLineMarkerProvider implements LineMarkerProvider, DumbAware {
     private DaemonCodeAnalyzerSettings myDaemonSettings;
@@ -61,15 +61,20 @@ public class LuaLineMarkerProvider implements LineMarkerProvider, DumbAware {
     };
 
     @Override
-    public LineMarkerInfo getLineMarkerInfo(final PsiElement element) {
+    public LineMarkerInfo<PsiElement> getLineMarkerInfo(final PsiElement element) {
         if (element instanceof LuaReturnStatement && LuaApplicationSettings.getInstance().SHOW_TAIL_CALLS_IN_GUTTER) {
             LuaReturnStatement e = (LuaReturnStatement) element;
 
             if (e.isTailCall())
-                return new LineMarkerInfo<PsiElement>(element, element.getTextRange(),
-                        LuaIcons.TAIL_RECURSION, Pass.UPDATE_ALL,
-                        tailCallTooltip, null,
-                        GutterIconRenderer.Alignment.LEFT);
+                return new LineMarkerInfo<>(
+                        element,
+                        element.getTextRange(),
+                        LuaIcons.TAIL_RECURSION,
+                        tailCallTooltip,
+                        null,
+                        GutterIconRenderer.Alignment.LEFT,
+                        () -> ""
+                );
         }
 
         if (myDaemonSettings.SHOW_METHOD_SEPARATORS) {
@@ -82,13 +87,20 @@ public class LuaLineMarkerProvider implements LineMarkerProvider, DumbAware {
 
 
                     LineMarkerInfo<PsiElement> info =
-                            new LineMarkerInfo<PsiElement>(element, range, null, FunctionUtil.nullConstant(),
-                                    new GutterIconNavigationHandler<PsiElement>() {
+                            new LineMarkerInfo<>(
+                                    element,
+                                    range,
+                                    null,
+                                    FunctionUtil.nullConstant(),
+                                    new GutterIconNavigationHandler<>() {
                                         @Override
                                         public void navigate(MouseEvent e, PsiElement elt) {
                                             this.navigate(e, elt);
                                         }
-                                    },  GutterIconRenderer.Alignment.RIGHT);
+                                    },
+                                    GutterIconRenderer.Alignment.RIGHT,
+                                    () -> ""
+                            );
 
                     EditorColorsScheme scheme = myColorsManager.getGlobalScheme();
                     info.separatorColor = scheme.getColor(CodeInsightColors.METHOD_SEPARATORS_COLOR);

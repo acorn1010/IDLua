@@ -2006,7 +2006,7 @@ public class KahluaParser implements PsiParser, LuaElementTypes {
 
     private static WhitespacesAndCommentsBinder TRAILING_WHITESPACE_AND_COMMENT_BINDER = new WhitespacesAndCommentsBinder() {
         @Override
-        public int getEdgePosition(final List<IElementType> tokens, final boolean atStreamEdge, final WhitespacesAndCommentsBinder.TokenTextGetter getter) {
+        public int getEdgePosition(final List<? extends IElementType> tokens, final boolean atStreamEdge, final WhitespacesAndCommentsBinder.TokenTextGetter getter) {
             if (tokens.size() == 0) return 0;
 
             int result = 0;
