@@ -30,6 +30,9 @@ import com.intellij.util.IncorrectOperationException;
 import com.sylvanaar.idea.Lua.lang.psi.LuaPsiFile;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Jon S Akhtar
@@ -88,13 +91,10 @@ public abstract class LuaFix implements LocalQuickFix {
       final ReadonlyStatusHandler handler = ReadonlyStatusHandler.getInstance(project);
         final ReadonlyStatusHandler.OperationStatus status;
         if (virtualFile != null) {
-            status = handler.ensureFilesWritable(virtualFile);
+            status = handler.ensureFilesWritable(Arrays.asList(virtualFile));
             return status.hasReadonlyFiles();
         }
 
         return false;
     }
-
-
-
 }

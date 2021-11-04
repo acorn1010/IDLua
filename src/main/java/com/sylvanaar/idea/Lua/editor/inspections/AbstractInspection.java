@@ -16,6 +16,7 @@
 package com.sylvanaar.idea.Lua.editor.inspections;
 
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
+import com.intellij.codeInsight.daemon.impl.actions.AbstractBatchSuppressByNoInspectionCommentFix;
 import com.intellij.codeInsight.daemon.impl.actions.AbstractSuppressByNoInspectionCommentFix;
 import com.intellij.codeInspection.*;
 import com.intellij.openapi.application.ApplicationManager;
@@ -97,14 +98,12 @@ public abstract class AbstractInspection extends LocalInspectionTool
         return getElementToolSuppressedIn(element, getShortName()) != null;
     }
 
-    public SuppressIntentionAction[] getSuppressActions(
-        @Nullable
-    PsiElement element) {
+    public SuppressIntentionAction[] getSuppressActions(@Nullable PsiElement element) {
         return new SuppressIntentionAction[] {
-            new AbstractSuppressByNoInspectionCommentFix(getID(), false) {
+            SuppressIntentionActionFromFix.convertBatchToSuppressIntentionAction(new AbstractBatchSuppressByNoInspectionCommentFix(getID(), false) {
                     @Nullable
                     @Override
-                    protected PsiElement getContainer(PsiElement context) {
+                    public PsiElement getContainer(PsiElement context) {
                         return PsiTreeUtil.getParentOfType(context,
                                 LuaStatementElement.class);
                     }
@@ -115,7 +114,7 @@ public abstract class AbstractInspection extends LocalInspectionTool
                         return InspectionsBundle.message(
                             "suppress.inspection.statement");
                     }
-                }
+                })
         };
     }
 

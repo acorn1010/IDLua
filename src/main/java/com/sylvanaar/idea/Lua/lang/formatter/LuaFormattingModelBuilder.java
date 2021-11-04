@@ -35,7 +35,9 @@ import org.jetbrains.annotations.NotNull;
 public class LuaFormattingModelBuilder implements FormattingModelBuilder {
 
     @NotNull
-    public FormattingModel createModel(PsiElement element, CodeStyleSettings settings) {
+    public FormattingModel createModel(FormattingContext formattingContext) {
+        PsiElement element = formattingContext.getPsiElement();
+        CodeStyleSettings settings = formattingContext.getCodeStyleSettings();
 
         ASTNode node = element.getNode();
         assert node != null;

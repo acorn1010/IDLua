@@ -28,6 +28,8 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.templateLanguages.OuterLanguageElement;
 import com.sylvanaar.idea.Lua.LuaFileType;
+import com.sylvanaar.idea.Lua.lang.LuaLanguage;
+import com.sylvanaar.idea.Lua.lang.formatter.LuaSupportedCodeStyleSettings;
 import com.sylvanaar.idea.Lua.lang.formatter.processors.LuaIndentProcessor;
 import com.sylvanaar.idea.Lua.lang.parser.LuaElementTypes;
 import com.sylvanaar.idea.Lua.lang.psi.LuaPsiFileBase;
@@ -128,7 +130,8 @@ public class LuaBlockGenerator implements LuaElementTypes {
      */
     private static List<Block> generateForBinaryExpr(final ASTNode node, Wrap myWrap, CodeStyleSettings mySettings) {
         final ArrayList<Block> subBlocks = new ArrayList<Block>();
-        Alignment alignment = mySettings.ALIGN_MULTILINE_BINARY_OPERATION ? Alignment.createAlignment() : null;
+
+        Alignment alignment = mySettings.getCommonSettings("Lua").ALIGN_MULTILINE_BINARY_OPERATION ? Alignment.createAlignment() : null;
         LuaBinaryExpression myExpr = (LuaBinaryExpression) node.getPsi();
         ASTNode[] children = node.getChildren(null);
         if (myExpr.getLeftExpression() instanceof LuaBinaryExpression) {

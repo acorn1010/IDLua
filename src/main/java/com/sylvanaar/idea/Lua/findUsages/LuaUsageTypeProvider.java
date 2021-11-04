@@ -30,8 +30,16 @@ import com.sylvanaar.idea.Lua.lang.psi.LuaPsiElement;
  * Time: 8:37 AM
  */
 public class LuaUsageTypeProvider implements UsageTypeProvider {
-    private static final UsageType LUA_USAGE_TYPE = new UsageType(LuaBundle.message("lua.usages.type"));
-    private static final UsageType LUADOC_USAGE_TYPE = new UsageType(LuaBundle.message("luadoc.usages.type"));
+    private static final UsageType LUA_USAGE_TYPE = new UsageType(() -> {
+        String message = LuaBundle.message("lua.usages.type");
+
+        return (message);
+    });
+    private static final UsageType LUADOC_USAGE_TYPE = new UsageType(() -> {
+        String message = LuaBundle.message("luadoc.usages.type");
+
+        return (message);
+    });
 
     @Override
     public UsageType getUsageType(PsiElement element) {

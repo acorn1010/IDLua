@@ -164,7 +164,7 @@ public class KahluaInterpreter extends JPanel {
     }
 
     private boolean isControl(KeyEvent keyEvent) {
-        return (keyEvent.getModifiers() & KeyEvent.CTRL_MASK) != 0;
+        return (keyEvent.getModifiersEx() & KeyEvent.CTRL_DOWN_MASK) != 0;
     }
 
 

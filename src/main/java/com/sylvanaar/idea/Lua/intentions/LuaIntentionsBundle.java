@@ -16,7 +16,7 @@
 
 package com.sylvanaar.idea.Lua.intentions;
 
-import com.intellij.CommonBundle;
+import com.intellij.AbstractBundle;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
 
@@ -35,7 +35,7 @@ public class LuaIntentionsBundle {
   private static final String BUNDLE = "com.sylvanaar.idea.Lua.intentions.LuaIntentionsBundle";
 
   public static String message(@PropertyKey(resourceBundle = BUNDLE)String key, Object... params) {
-    return CommonBundle.message(getBundle(), key, params);
+    return AbstractBundle.message(getBundle(), key, params);
   }
 
   private static ResourceBundle getBundle() {

@@ -207,13 +207,11 @@ public class LuaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSetti
                "end";
     }
 
-
     @Override
-    public CommonCodeStyleSettings getDefaultCommonSettings() {
-        CommonCodeStyleSettings settings = new CommonCodeStyleSettings(LuaFileType.LUA_LANGUAGE);
-        settings.initIndentOptions();
-        return settings;
+    public void customizeDefaults(@NotNull CommonCodeStyleSettings commonSettings, @NotNull CommonCodeStyleSettings.IndentOptions indentOptions) {
+        commonSettings.initIndentOptions();
     }
+
     @Override
     public IndentOptionsEditor getIndentOptionsEditor() {
       return new SmartIndentOptionsEditor();

@@ -41,11 +41,9 @@ public class LuaAliasedElementSearcher extends QueryExecutorBase<PsiReference, R
     if (name == null || StringUtil.isEmptyOrSpaces(name)) return;
 
     final SearchScope scope = parameters.getEffectiveSearchScope();
-
     final SearchRequestCollector collector = parameters.getOptimizer();
-    final SearchSession session = collector.getSearchSession();
 
-    collector.searchWord(name, scope, UsageSearchContext.IN_CODE, true, new MyProcessor(target, null, session));
+    collector.searchWord(name, scope, UsageSearchContext.IN_CODE, true, target);
   }
 
   private static class MyProcessor extends RequestResultProcessor {
@@ -77,7 +75,7 @@ public class LuaAliasedElementSearcher extends QueryExecutorBase<PsiReference, R
       final SearchScope fileScope = new LocalSearchScope(element.getContainingFile());
       collector.searchWord(alias, fileScope, UsageSearchContext.IN_CODE, true, myTarget);
 
-      return PsiSearchHelper.SERVICE.getInstance(element.getProject()).processRequests(collector, processor);
+      return PsiSearchHelper.getInstance(element.getProject()).processRequests(collector, processor);
     }
   }
 

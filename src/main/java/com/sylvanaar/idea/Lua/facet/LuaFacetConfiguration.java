@@ -22,6 +22,7 @@ import com.intellij.facet.FacetConfiguration;
 import com.intellij.facet.ui.FacetEditorContext;
 import com.intellij.facet.ui.FacetEditorTab;
 import com.intellij.facet.ui.FacetValidatorsManager;
+import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
@@ -30,11 +31,14 @@ import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
 import com.sylvanaar.idea.Lua.sdk.LuaSdkType;
 import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class LuaFacetConfiguration implements FacetConfiguration {
+public class LuaFacetConfiguration implements PersistentStateComponent<Element>, FacetConfiguration {
     private Logger LOG = Logger.getInstance("Lua.LuaFacetConfiguration");
 
     private String SDK_NAME = "SdkName";
+    private Element element = null;
 
     private Sdk sdk;
 
@@ -46,15 +50,26 @@ public class LuaFacetConfiguration implements FacetConfiguration {
         return new FacetEditorTab[]{new LuaSdkEditorTab(facetEditorContext)};
     }
 
-    @Override
-    public void readExternal(Element element) throws InvalidDataException {
-        String sdkName = element.getAttributeValue(SDK_NAME);
-        sdk = StringUtil.isEmpty(sdkName) ? null : ProjectJdkTable.getInstance().findJdk(sdkName, LuaSdkType.getInstance().getName());
+    @Nullable
+    public Element getState() {
+        if (!(this.element == null)) {
+            this.element = new Element("generated");
+        }
+
+        this.element.setAttribute(this.SDK_NAME, (this.sdk == null) ? "" : this.sdk.getName());
+
+        return (this.element);
     }
 
-    @Override
-    public void writeExternal(Element element) throws WriteExternalException {
-        element.setAttribute(SDK_NAME, sdk == null ? "" : sdk.getName());
+    public void loadState(@NotNull Element state) {
+        if (this.element != null) {
+            String sdkName = state.getAttributeValue(SDK_NAME);
+            this.sdk = StringUtil.isEmpty(sdkName)
+                    ? null
+                    : ProjectJdkTable.getInstance().findJdk(sdkName, LuaSdkType.getInstance().getName());
+
+            this.element = state;
+        }
     }
 
     public Sdk getSdk() {

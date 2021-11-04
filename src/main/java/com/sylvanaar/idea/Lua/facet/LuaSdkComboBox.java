@@ -15,25 +15,50 @@
  */
 package com.sylvanaar.idea.Lua.facet;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.ui.ProjectJdksEditor;
+import com.intellij.openapi.ui.ComboBox;
+import com.intellij.openapi.ui.ComponentWithBrowseButton;
 import com.intellij.ui.ComboboxWithBrowseButton;
+import com.intellij.ui.components.fields.ExtendableTextComponent;
+import com.intellij.ui.components.fields.ExtendableTextField;
 import com.sylvanaar.idea.Lua.sdk.LuaSdkType;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicComboBoxEditor;
 import java.util.List;
 
 /**
  * @author yole
  */
-public class LuaSdkComboBox extends ComboboxWithBrowseButton {
+public class LuaSdkComboBox extends ComponentWithBrowseButton<JComboBox> {
   private Project myProject;
+  private ComboBox<String> eComboBox;
 
   LuaSdkComboBox() {
+    super(new JComboBox(), null);
+
     addActionListener(e -> {
+      ExtendableTextComponent.Extension browseExtension =
+              ExtendableTextComponent.Extension.create(AllIcons.General.OpenDisk, AllIcons.General.OpenDiskHover,
+                      "Open file", () -> System.out.println("Browse file clicked"));
+
+      this.eComboBox = new ComboBox<>();
+      this.eComboBox.setEditable(true);
+      this.eComboBox.setEditor(new BasicComboBoxEditor(){
+        @Override
+        protected JTextField createEditorComponent() {
+          ExtendableTextField ecbEditor = new ExtendableTextField();
+          ecbEditor.addExtension(browseExtension);
+          ecbEditor.setBorder(null);
+          return ecbEditor;
+        }
+      });
+
       Sdk selectedSdk = getSelectedSdk();
       final Project project = myProject != null ? myProject : ProjectManager.getInstance().getDefaultProject();
       ProjectJdksEditor editor = new ProjectJdksEditor(selectedSdk, project, LuaSdkComboBox.this);
@@ -41,8 +66,9 @@ public class LuaSdkComboBox extends ComboboxWithBrowseButton {
         selectedSdk = editor.getSelectedJdk();
         updateSdkList(selectedSdk, false);
       }
+
+      updateSdkList(null, true);
     });
-    updateSdkList(null, true);
   }
 
   public void setProject(Project project) {
@@ -55,15 +81,15 @@ public class LuaSdkComboBox extends ComboboxWithBrowseButton {
       sdkToSelect = sdkList.get(0);
     }
     sdkList.add(0, null);
-    getComboBox().setModel(new DefaultComboBoxModel(sdkList.toArray(new Sdk[sdkList.size()])));
-    getComboBox().setSelectedItem(sdkToSelect);
+    this.eComboBox.setModel(new DefaultComboBoxModel(sdkList.toArray(new Sdk[sdkList.size()])));
+    this.eComboBox.setSelectedItem(sdkToSelect);
   }
 
   public void updateSdkList() {
-    updateSdkList((Sdk) getComboBox().getSelectedItem(), false);
+    updateSdkList((Sdk) this.eComboBox.getSelectedItem(), false);
   }
 
   Sdk getSelectedSdk() {
-    return (Sdk) getComboBox().getSelectedItem();
+    return (Sdk) this.eComboBox.getSelectedItem();
   }
 }

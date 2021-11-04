@@ -30,6 +30,7 @@ import com.intellij.psi.codeStyle.SuggestedNameInfo;
 import gnu.trove.THashSet;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -77,7 +78,7 @@ public class QuickfixUtil {
   public static boolean ensureFileWritable(Project project, PsiFile file) {
     final VirtualFile virtualFile = file.getVirtualFile();
     final ReadonlyStatusHandler readonlyStatusHandler = ReadonlyStatusHandler.getInstance(project);
-    final ReadonlyStatusHandler.OperationStatus operationStatus = readonlyStatusHandler.ensureFilesWritable(virtualFile);
+    final ReadonlyStatusHandler.OperationStatus operationStatus = readonlyStatusHandler.ensureFilesWritable(Arrays.asList(virtualFile));
     return !operationStatus.hasReadonlyFiles();
   }
 
