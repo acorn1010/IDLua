@@ -47,7 +47,7 @@ public class LuaRequireResolver implements ResolveCache.AbstractResolver<LuaRefe
         if (path != null) {
             path = path.replace('.', '/').concat(".").concat(LuaFileType.DEFAULT_EXTENSION);
 
-            final VirtualFile file = project.getBaseDir().findFileByRelativePath(path);
+            final VirtualFile file = project.getProjectFile().findFileByRelativePath(path);
 
             if (file != null) {
                 final PsiFile resolvedPsiFile = psiManager.findFile(file);

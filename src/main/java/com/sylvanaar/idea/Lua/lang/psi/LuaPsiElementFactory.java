@@ -38,7 +38,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class LuaPsiElementFactory {
     public static LuaPsiElementFactory getInstance(Project project) {
-        return ServiceManager.getService(project, LuaPsiElementFactory.class);
+        return project.getService(LuaPsiElementFactory.class);
     }
 
     public abstract LuaPsiFile createLuaFile(String text);
