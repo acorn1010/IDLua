@@ -22,7 +22,6 @@ import com.intellij.lang.PsiBuilderFactory;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
-import com.intellij.util.containers.HashSet;
 import com.sylvanaar.idea.Lua.lang.luadoc.lexer.ILuaDocElementType;
 import com.sylvanaar.idea.Lua.lang.luadoc.lexer.LuaDocLexer;
 import com.sylvanaar.idea.Lua.lang.luadoc.psi.api.LuaDocTag;
@@ -30,6 +29,7 @@ import com.sylvanaar.idea.Lua.lang.parser.util.ParserUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import static com.sylvanaar.idea.Lua.lang.luadoc.lexer.LuaDocTokenTypes.LDOC_TAG_PLAIN_VALUE_TOKEN;

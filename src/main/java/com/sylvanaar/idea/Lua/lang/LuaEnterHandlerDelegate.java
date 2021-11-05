@@ -95,7 +95,7 @@ public class LuaEnterHandlerDelegate implements EnterHandlerDelegate {
                     caretOffsetRef.set(editor.getCaretModel().getOffset());
                     return Result.DefaultForceIndent;
                 }
-                originalHandler.execute(editor, dataContext);
+                originalHandler.execute(editor, null, dataContext);
                 caretOffsetRef.set(editor.getCaretModel().getOffset());
 
                 return Result.Stop;

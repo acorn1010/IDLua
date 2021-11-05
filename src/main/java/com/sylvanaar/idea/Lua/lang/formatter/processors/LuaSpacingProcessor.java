@@ -115,7 +115,7 @@ public class LuaSpacingProcessor extends LuaElementVisitor {
         return;
       }
 
-      if (myChild2 != null && mySettings.KEEP_FIRST_COLUMN_COMMENT && SpacingUtil.COMMENT_BIT_SET.contains(myChild2.getElementType())) {
+      if (myChild2 != null && mySettings.getCommonSettings("Lua").KEEP_FIRST_COLUMN_COMMENT && SpacingUtil.COMMENT_BIT_SET.contains(myChild2.getElementType())) {
 
           myResult = Spacing.createKeepingFirstColumnSpacing(0, Integer.MAX_VALUE, true, 1);
 
@@ -125,7 +125,14 @@ public class LuaSpacingProcessor extends LuaElementVisitor {
       if (myChild1 != null && myChild2 != null && myChild1.getElementType() == NEWLINE) {
         final ASTNode prev = SpacingUtil.getPrevElementType(myChild1);
         if (prev != null && prev.getElementType() == SHORTCOMMENT) {
-          myResult = Spacing.createSpacing(0, 0, 1, mySettings.KEEP_LINE_BREAKS, mySettings.KEEP_BLANK_LINES_IN_CODE);
+          myResult = Spacing.createSpacing(
+                  0,
+                  0,
+                  1,
+                  mySettings.getCommonSettings("Lua").KEEP_LINE_BREAKS,
+                  mySettings.getCommonSettings("Lua").KEEP_BLANK_LINES_IN_CODE
+          );
+
           return;
         }
       }

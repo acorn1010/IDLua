@@ -17,56 +17,56 @@
 package com.sylvanaar.idea.Lua.lang.luadoc.completion;
 
 import com.intellij.codeInsight.TailType;
-import com.intellij.codeInsight.completion.CompletionData;
+import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionVariant;
 import com.intellij.psi.filters.*;
 import com.intellij.psi.filters.position.LeftNeighbour;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.sylvanaar.idea.Lua.lang.luadoc.completion.filters.SimpleTagNameFilter;
 
-public class LuaDocCompletionData extends CompletionData {
+public class LuaDocCompletionData extends CompletionContributor {
     private static final String[] DOC_TAGS =
             {"author", "copyright", "field", "param", "release", "return", "see", "usage", "class",
                     "description", "name"};
 
     public LuaDocCompletionData() {
-        registerAllCompletions();
+//        registerAllCompletions();
     }
 
-    private void registerAllCompletions() {
-        registerTagNameCompletion();
-    }
-
-    private void registerTagNameCompletion() {
-        registerStandardCompletion(new SimpleTagNameFilter(), DOC_TAGS);
-    }
-
-
-    /**
-     * Template to add all standard keywords completions
-     *
-     * @param filter   - Semantic filter for given keywords
-     * @param keywords - Keywords to be completed
-     */
-    private void registerStandardCompletion(ElementFilter filter, String... keywords) {
-        LeftNeighbour afterDotFilter = new LeftNeighbour(new PlainTextFilter("."));
-        CompletionVariant variant = new CompletionVariant(new AndFilter(new NotFilter(afterDotFilter), filter));
-        variant.includeScopeClass(LeafPsiElement.class);
-        variant.addCompletionFilter(TrueFilter.INSTANCE);
-        addCompletions(variant, keywords);
-        registerVariant(variant);
-    }
-
-
-    /**
-     * Adds all completion variants in sequence
-     *
-     * @param comps   Given completions
-     * @param variant Variant for completions
-     */
-    private void addCompletions(CompletionVariant variant, String... comps) {
-        for (String completion : comps) {
-            variant.addCompletion(completion, TailType.SPACE);
-        }
-    }
+//
+//    private void registerAllCompletions() {
+//        registerTagNameCompletion();
+//    }
+//
+//    private void registerTagNameCompletion() {
+//        registerStandardCompletion(new SimpleTagNameFilter(), DOC_TAGS);
+//    }
+//
+//
+//    /**
+//     * Template to add all standard keywords completions
+//     *
+//     * @param filter   - Semantic filter for given keywords
+//     * @param keywords - Keywords to be completed
+//     */
+//    private void registerStandardCompletion(ElementFilter filter, String... keywords) {
+//        LeftNeighbour afterDotFilter = new LeftNeighbour(new PlainTextFilter("."));
+//        CompletionVariant variant = new CompletionVariant(new AndFilter(new NotFilter(afterDotFilter), filter));
+//        variant.includeScopeClass(LeafPsiElement.class);
+//        variant.addCompletionFilter(TrueFilter.INSTANCE);
+//        addCompletions(variant, keywords);
+//        registerVariant(variant);
+//    }
+//
+//    /**
+//     * Adds all completion variants in sequence
+//     *
+//     * @param comps   Given completions
+//     * @param variant Variant for completions
+//     */
+//    private void addCompletions(CompletionVariant variant, String... comps) {
+//        for (String completion : comps) {
+//            variant.addCompletion(completion, TailType.SPACE);
+//        }
+//    }
 }
