@@ -35,8 +35,13 @@ public class LuaTemplateContextType extends TemplateContextType {
         super("LUA", "Lua");
     }
 
-    public boolean isInContext(@NotNull PsiFile file, int offset) {
-        if (PsiUtilBase.getLanguageAtOffset(file, offset).isKindOf(LuaFileType.LUA_LANGUAGE)) {
+    @Override
+    public boolean isInContext(@NotNull TemplateActionContext templateActionContext) {
+        PsiFile file = templateActionContext.getFile();
+        int offset = file.getTextOffset();
+
+        if (PsiUtilBase.getLanguageAtOffset(file, offset).isKindOf(LuaFileType.LUA_LANGUAGE)
+        ) {
           PsiElement element = file.findElementAt(offset);
           return PsiTreeUtil.getParentOfType(element, PsiComment.class, false) == null;
         }
@@ -49,4 +54,3 @@ public class LuaTemplateContextType extends TemplateContextType {
         return new LuaSyntaxHighlighter();
     }
 }
-

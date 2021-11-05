@@ -24,6 +24,7 @@ import com.intellij.openapi.progress.*;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.*;
+import com.intellij.openapi.startup.StartupActivity;
 import com.intellij.openapi.startup.StartupManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -62,8 +63,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Date: 7/10/11
  * Time: 6:32 PM
  */
-public class LuaPsiManager extends AbstractProjectComponent implements ProjectComponent {
+public class LuaPsiManager implements StartupActivity {
     private static final Logger log = Logger.getInstance("Lua.LuaPsiManger");
+    private Project myProject;
 
 //    private static final NotNullLazyKey<LuaPsiManager, Project> INSTANCE_KEY = ServiceManager.createLazyKey(
 //            LuaPsiManager.class);
@@ -101,8 +103,12 @@ public class LuaPsiManager extends AbstractProjectComponent implements ProjectCo
     }
 
     public LuaPsiManager(final Project project) {
-        super(project);
         log.debug("*** CREATED ***");
+    }
+
+    @Override
+    public void runActivity(@NotNull Project project) {
+        myProject = project;
     }
 
     private void reset() {
@@ -196,7 +202,6 @@ public class LuaPsiManager extends AbstractProjectComponent implements ProjectCo
 //        return INSTANCE_KEY.getValue(project);
     }
 
-    @Override
     public void projectOpened() {
         work = new ArrayListSet<InferenceCapable>();
         inferenceQueueProcessor =
@@ -212,20 +217,7 @@ public class LuaPsiManager extends AbstractProjectComponent implements ProjectCo
         });
     }
 
-    @Override
-    public void projectClosed() {
-    }
-
-    @Override
-    public void initComponent() {
-    }
-
-    @Override
-    public void disposeComponent() {
-    }
-
     @NotNull
-    @Override
     public String getComponentName() {
         return "Lua.PsiManager";
     }

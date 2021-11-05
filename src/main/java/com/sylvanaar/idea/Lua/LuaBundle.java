@@ -16,6 +16,7 @@
 
 package com.sylvanaar.idea.Lua;
 
+import com.intellij.AbstractBundle;
 import com.intellij.CommonBundle;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
@@ -41,7 +42,7 @@ public class LuaBundle {
     }
 
     public static String message(@PropertyKey(resourceBundle = BUNDLE) String key, Object... params) {
-        return CommonBundle.message(getBundle(), key, params);
+        return AbstractBundle.message(getBundle(), key, params);
     }
 
     private static ResourceBundle getBundle() {

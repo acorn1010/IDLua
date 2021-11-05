@@ -27,6 +27,6 @@ import com.intellij.openapi.project.Project;
  */
 public class LuaCodeStyleManager {
   public static LuaCodeStyleManager getInstance(Project project) {
-    return ServiceManager.getService(project, LuaCodeStyleManager.class);
+    return project.getService(LuaCodeStyleManager.class);
   }
 }

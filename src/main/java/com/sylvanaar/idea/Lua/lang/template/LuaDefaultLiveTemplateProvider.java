@@ -16,7 +16,7 @@
 
 package com.sylvanaar.idea.Lua.lang.template;
 
-import com.intellij.codeInsight.template.impl.DefaultLiveTemplatesProvider;
+import com.intellij.codeInsight.template.TemplateContextType;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,8 +24,10 @@ import com.intellij.codeInsight.template.impl.DefaultLiveTemplatesProvider;
  * Date: 2/23/11
  * Time: 1:03 AM
  */
-public class LuaDefaultLiveTemplateProvider
-    implements DefaultLiveTemplatesProvider {
+public class LuaDefaultLiveTemplateProvider extends TemplateContextType {
+    protected LuaDefaultLiveTemplateProvider() {
+        super("LUA", "Lua");
+    }
 
     public String[] getDefaultLiveTemplateFiles()
     {

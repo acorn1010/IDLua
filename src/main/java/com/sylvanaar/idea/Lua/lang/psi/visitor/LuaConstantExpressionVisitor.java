@@ -18,6 +18,7 @@ package com.sylvanaar.idea.Lua.lang.psi.visitor;
 
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
+import com.intellij.util.containers.Interner;
 import com.intellij.util.containers.StringInterner;
 import com.sylvanaar.idea.Lua.lang.psi.expressions.LuaBinaryExpression;
 import com.sylvanaar.idea.Lua.lang.psi.expressions.LuaLiteralExpression;
@@ -32,7 +33,7 @@ import java.util.Set;
  * Time: 6:14 PM
  */
 public class LuaConstantExpressionVisitor extends LuaElementVisitor {
-    private final StringInterner myInterner = new StringInterner();
+    private final Interner<String> myInterner = Interner.createStringInterner();
     private Set<LuaSymbol> myVisitedVars;
     private Object         myResult;
 
