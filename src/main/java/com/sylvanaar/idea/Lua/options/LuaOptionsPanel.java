@@ -60,12 +60,13 @@ public class LuaOptionsPanel extends BaseConfigurable implements Configurable {
             }
         });
         interpretersTable = new LuaInterpretersTable();
-        interpretersTable.addObserver(new Observer() {
-            @Override
-            public void update(Observable observable, Object o) {
-                setModified(true);
-            }
-        });
+        // Todo: Deprecated need java.beans update
+//        interpretersTable.addObserver(new Observer() {
+//            @Override
+//            public void update(Observable observable, Object o) {
+//                setModified(true);
+//            }
+//        });
 
         interpretersPanel.add(interpretersTable.getComponent());
 
