@@ -155,8 +155,14 @@ Request and perform code reviews from inside your IDE.  Review any code, even if
         <!--<projectService serviceImplementation="com.sylvanaar.idea.Lua.settings.LuaProjectSettings"-->
         <!--serviceInterface="com.sylvanaar.idea.Lua.settings.LuaProjectSettings" />-->
 
-<!--        <fileTypeFactory implementation="com.sylvanaar.idea.Lua.LuaFileTypeLoader"/>-->
-        <fileType name="Lua" extensions="lua;doclua;wlua" language="Lua" id="Lua" implementationClass="com.sylvanaar.idea.Lua.LuaFileType"/>
+        <fileType
+                name="Lua"
+                implementationClass="com.sylvanaar.idea.Lua.LuaFileType"
+                fieldName="INSTANCE"
+                language="Lua"
+                extensions="lua;doclua;wlua"
+                id="Lua"
+        />
         <!-- Script Running -->
         <configurationType id="Lua" implementation="com.sylvanaar.idea.Lua.run.LuaConfigurationType"/>
 

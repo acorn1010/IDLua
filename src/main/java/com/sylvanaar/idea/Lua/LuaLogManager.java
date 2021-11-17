@@ -1,7 +1,9 @@
 package com.sylvanaar.idea.Lua;
 
 import com.intellij.openapi.application.PathManager;
+import com.intellij.openapi.application.PreloadingActivity;
 import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -16,12 +18,12 @@ import java.io.StringReader;
 /**
  * Created by Jon on 10/8/2016.
  */
-class LuaLoggerManager implements ApplicationComponent {
+class LuaLoggerManager extends PreloadingActivity {
     private static final String SYSTEM_MACRO = "$SYSTEM_DIR$";
     private static final String APPLICATION_MACRO = "$APPLICATION_DIR$";
     private static final String LOG_DIR_MACRO = "$LOG_DIR$";
 
-    private void init() {
+    public void preload(@NotNull ProgressIndicator indicator) {
         try {
             final VirtualFile logXml = LuaFileUtil.getPluginVirtualDirectoryChild("log.xml");
 
@@ -37,21 +39,5 @@ class LuaLoggerManager implements ApplicationComponent {
         catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void initComponent() {
-        init();
-    }
-
-    @Override
-    public void disposeComponent() {
-
-    }
-
-    @NotNull
-    @Override
-    public String getComponentName() {
-        return "LuaLogManager";
     }
 }

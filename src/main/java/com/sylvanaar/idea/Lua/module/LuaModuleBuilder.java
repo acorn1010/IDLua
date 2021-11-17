@@ -77,7 +77,4 @@ class LuaModuleBuilder extends ModuleBuilder {
     public boolean isSuitableSdkType(SdkTypeId sdkType) {
         return sdkType instanceof LuaSdkType;
     }
-
-    @Override
-    public boolean isSuitableSdk(Sdk sdk) { return sdk.getSdkType() == LuaSdkType.getInstance(); }
 }

@@ -29,7 +29,7 @@ import java.util.List;
 
 public class LuaModuleConfigurationEditorProvider implements ModuleConfigurationEditorProvider {
     public ModuleConfigurationEditor[] createEditors(@NotNull final ModuleConfigurationState state) {
-        final Module module = state.getRootModel().getModule();
+        final Module module = state.getCurrentRootModel().getModule();
         if (!LuaModuleUtil.isLuaModule(module)) return ModuleConfigurationEditor.EMPTY;
         final DefaultModuleConfigurationEditorFactory editorFactory = DefaultModuleConfigurationEditorFactory.getInstance();
         final List<ModuleConfigurationEditor> editors = new ArrayList<ModuleConfigurationEditor>();

@@ -1,20 +1,22 @@
 package com.sylvanaar.idea.Lua;
 
+import com.intellij.openapi.application.PreloadingActivity;
 import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.vfs.JarFileSystem;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.serviceContainer.BaseComponentAdapter;
 import com.sylvanaar.idea.Lua.util.LuaFileUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 /**
  * Created by jon on 12/18/2016.
  */
-public class LuaResourceUnpacker extends ApplicationComponent.Adapter {
-
-    @Override
-    public void initComponent() {
+public class LuaResourceUnpacker extends PreloadingActivity {
+    public void preload(@NotNull ProgressIndicator indicator) {
         VirtualFile pluginVirtualDirectory = LuaFileUtil.getPluginVirtualDirectory();
 
         if (pluginVirtualDirectory != null) {

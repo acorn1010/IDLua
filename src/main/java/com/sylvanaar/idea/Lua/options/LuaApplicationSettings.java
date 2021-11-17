@@ -16,15 +16,16 @@
 
 package com.sylvanaar.idea.Lua.options;
 
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.*;
 import com.intellij.util.xmlb.XmlSerializerUtil;
+import com.sylvanaar.idea.Lua.editor.completion.LuaKeywordsManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.intellij.openapi.components.ServiceManager.getService;
 
 /**
  * Created by IntelliJ IDEA.
@@ -36,7 +37,7 @@ import java.util.List;
 @State(
         name = "LuaApplicationSettings",
         storages = {
-                @Storage(file = "$APP_CONFIG$/other.xml")
+                @Storage(value = "$APP_CONFIG$/other.xml")
         }
 )
 public class LuaApplicationSettings implements PersistentStateComponent<LuaApplicationSettings> {
@@ -56,7 +57,7 @@ public class LuaApplicationSettings implements PersistentStateComponent<LuaAppli
     }
 
     public static LuaApplicationSettings getInstance() {
-        return ServiceManager.getService(LuaApplicationSettings.class);
+        return ApplicationManager.getApplication().getService(LuaApplicationSettings.class);
     }
 
     @Nullable

@@ -40,6 +40,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
@@ -160,7 +161,7 @@ public class LuaJInterpreter extends JPanel {
     }
 
     private static boolean isControl(KeyEvent keyEvent) {
-        return (keyEvent.getModifiers()&InputEvent.CTRL_MASK) != 0;
+        return (keyEvent.getModifiersEx()&InputEvent.CTRL_DOWN_MASK) != 0;
     }
 
     private void setStatus(final String text) {
@@ -184,7 +185,7 @@ public class LuaJInterpreter extends JPanel {
                     _G.STDOUT = new PrintStream(outputStream);
                     _G.get("load").call(LuaValue.valueOf(text)).call();
 
-                    print(new String(outputStream.toByteArray(), CharsetToolkit.UTF8_CHARSET));
+                    print(outputStream.toString(StandardCharsets.UTF_8));
                     _G.STDOUT = stdout;
                 } catch (LuaError e) {
                     printError(e);
