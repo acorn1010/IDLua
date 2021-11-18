@@ -117,7 +117,7 @@ public class LuaCommandLineState extends CommandLineState {
         }
 
         commandLine.getEnvironment().putAll(cfg.getEnvs());
-        commandLine.setPassParentEnvironment(cfg.isPassParentEnvs());
+        commandLine.withParentEnvironmentType(commandLine.getParentEnvironmentType());
 
         return configureCommandLine(commandLine);
     }

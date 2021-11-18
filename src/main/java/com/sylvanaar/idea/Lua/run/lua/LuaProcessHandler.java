@@ -21,6 +21,8 @@ import com.intellij.openapi.vfs.CharsetToolkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Jon S Akhtar
@@ -29,13 +31,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public class LuaProcessHandler extends CapturingProcessHandler {
     public LuaProcessHandler(@NotNull Process process, @Nullable String commandLine) {
-        super(process, CharsetToolkit.UTF8_CHARSET,  commandLine);
+        super(process, StandardCharsets.UTF_8,  commandLine);
     }
 
     @Override
     protected boolean shouldDestroyProcessRecursively() {
         return true;
     }
-
-
 }

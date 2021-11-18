@@ -17,7 +17,9 @@
 package com.sylvanaar.idea.Lua.sdk;
 
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.PreloadingActivity;
 import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.projectRoots.impl.ProjectJdkImpl;
 import com.intellij.openapi.roots.OrderRootType;
@@ -37,7 +39,7 @@ import java.io.File;
  * Date: Aug 28, 2010
  * Time: 11:43:09 AM
  */
-public class LuaJSdk implements Sdk, ApplicationComponent {
+public class LuaJSdk extends PreloadingActivity implements Sdk {
     public static final String NAME = "LuaJ";
 
     private Sdk mySdk = null;
@@ -97,15 +99,58 @@ public class LuaJSdk implements Sdk, ApplicationComponent {
     }
 
     @NotNull
-    @Override
     public String getComponentName() {
         return LuaBundle.message("luaj.componentname");
     }
 
     public String LUAJ_JAR = null;
 
+    @Nullable
+    public static VirtualFile getLuaJJarFile() {
+        final VirtualFile directory = LuaFileUtil.getPluginVirtualDirectory();
+        if (directory != null) {
+            final VirtualFile lib = directory.findChild("lib");
+            if (lib != null) {
+                VirtualFile[] children = lib.getChildren();
+                if (children != null) {
+                    for (VirtualFile child : children) {
+                        if (child.getName().startsWith("luaj-jse")) {
+                            return child;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static Sdk createMockSdk(String jdkHome, final String versionName) {
+        File jdkHomeFile = new File(jdkHome);
+        // if (!jdkHomeFile.exists()) return null;
+
+        final Sdk jdk = new ProjectJdkImpl(versionName, LuaSdkType.getInstance());
+        final SdkModificator sdkModificator = jdk.getSdkModificator();
+
+        String path = jdkHome.replace(File.separatorChar, '/');
+        sdkModificator.setHomePath(path);
+        sdkModificator.setVersionString(
+                versionName); // must be set after home path, otherwise setting home path clears the version string
+        sdkModificator.addRoot(StdLibrary.getStdFileLocation(), OrderRootType.SOURCES);
+        sdkModificator.commitChanges();
+
+        return jdk;
+    }
+
+    public <T> T getUserData(@NotNull Key<T> key) {
+        return null;
+    }
+
+    public <T> void putUserData(@NotNull Key<T> key, @Nullable T value) {
+
+    }
+
     @Override
-    public void initComponent() {
+    public void preload(@NotNull ProgressIndicator indicator) {
         final VirtualFile jarFile = getLuaJJarFile();
         if (jarFile != null) {
             LUAJ_JAR = LuaFileUtil.getPathToDisplay(jarFile);
@@ -113,16 +158,6 @@ public class LuaJSdk implements Sdk, ApplicationComponent {
 
         ProjectJdkTable pjt = ProjectJdkTable.getInstance();
         mySdk = pjt.findJdk(LuaJSdk.NAME);
-
-//        try {
-//            if (Integer.parseInt(mySdk.getVersionString()) < 2) {
-//                pjt.removeJdk(mySdk);
-//                mySdk = null;
-//            }
-//        } catch (NumberFormatException e) {
-//            pjt.removeJdk(mySdk);
-//            mySdk = null;
-//        }
 
         if (mySdk == null) {
             mySdk = createMockSdk("", LuaJSdk.NAME);
@@ -156,57 +191,5 @@ public class LuaJSdk implements Sdk, ApplicationComponent {
 
             sdkModificator.commitChanges();
         }
-    }
-
-    @Nullable
-    public static VirtualFile getLuaJJarFile() {
-        final VirtualFile directory = LuaFileUtil.getPluginVirtualDirectory();
-        if (directory != null) {
-            final VirtualFile lib = directory.findChild("lib");
-            if (lib != null) {
-                VirtualFile[] children = lib.getChildren();
-                if (children != null) {
-                    for (VirtualFile child : children) {
-                        if (child.getName().startsWith("luaj-jse")) {
-                            return child;
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public void disposeComponent() {
-
-    }
-
-
-    public static Sdk createMockSdk(String jdkHome, final String versionName) {
-        File jdkHomeFile = new File(jdkHome);
-        // if (!jdkHomeFile.exists()) return null;
-
-        final Sdk jdk = new ProjectJdkImpl(versionName, LuaSdkType.getInstance());
-        final SdkModificator sdkModificator = jdk.getSdkModificator();
-
-        String path = jdkHome.replace(File.separatorChar, '/');
-        sdkModificator.setHomePath(path);
-        sdkModificator.setVersionString(
-                versionName); // must be set after home path, otherwise setting home path clears the version string
-        sdkModificator.addRoot(StdLibrary.getStdFileLocation(), OrderRootType.SOURCES);
-        sdkModificator.commitChanges();
-
-        return jdk;
-    }
-
-    //@Override
-    public <T> T getUserData(@NotNull Key<T> key) {
-        return null;
-    }
-
-    //    @Override
-    public <T> void putUserData(@NotNull Key<T> key, @Nullable T value) {
-
     }
 }

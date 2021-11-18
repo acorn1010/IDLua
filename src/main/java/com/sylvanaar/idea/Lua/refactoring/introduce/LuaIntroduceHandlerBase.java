@@ -311,10 +311,9 @@ public abstract class LuaIntroduceHandlerBase<Settings extends LuaIntroduceSetti
     HighlightManager highlightManager = null;
     if (context.editor != null) {
       highlightManager = HighlightManager.getInstance(context.project);
-      EditorColorsManager colorsManager = EditorColorsManager.getInstance();
-      TextAttributes attributes = colorsManager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
+
       if (context.occurrences.length > 1) {
-        highlightManager.addOccurrenceHighlights(context.editor, context.occurrences, attributes, true, highlighters);
+        highlightManager.addOccurrenceHighlights(context.editor, context.occurrences, EditorColors.SEARCH_RESULT_ATTRIBUTES, true, highlighters);
       }
     }
 

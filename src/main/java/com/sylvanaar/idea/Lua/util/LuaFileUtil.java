@@ -26,6 +26,7 @@ import com.sylvanaar.idea.Lua.*;
 import org.jetbrains.annotations.*;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.regex.Pattern;
 
 /**
@@ -47,11 +48,11 @@ public class LuaFileUtil {
 
     @Nullable
     public static VirtualFile getPluginVirtualDirectory() {
-        IdeaPluginDescriptor descriptor = PluginManager.getPlugin(PluginId.getId(LuaFileType.LUA_PLUGIN_ID));
+        IdeaPluginDescriptor descriptor = PluginManagerCore.getPlugin(PluginId.getId(LuaFileType.LUA_PLUGIN_ID));
         if (descriptor != null) {
-            File pluginPath = descriptor.getPath();
+            Path pluginPath = descriptor.getPluginPath();
 
-            String url = VfsUtil.pathToUrl(pluginPath.getAbsolutePath());
+            String url = VfsUtil.pathToUrl(pluginPath.toUri().getPath());
 
             return VirtualFileManager.getInstance().findFileByUrl(url);
         }
@@ -84,7 +85,7 @@ public class LuaFileUtil {
             if (file.isDirectory()) return true;
 
             for (ExtensionFileNameMatcher matcher : LuaFileType.EXTENSION_FILE_NAME_MATCHERS) {
-                if (matcher.accept(file.getName())) return true;
+                if (matcher.acceptsCharSequence(file.getName())) return true;
             }
 
             return false;

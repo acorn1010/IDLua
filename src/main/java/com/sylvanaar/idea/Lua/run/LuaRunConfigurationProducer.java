@@ -18,11 +18,15 @@ package com.sylvanaar.idea.Lua.run;
 
 import com.intellij.execution.*;
 import com.intellij.execution.actions.*;
+import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.impl.*;
 import com.intellij.execution.junit.*;
 import com.intellij.openapi.module.*;
 import com.intellij.openapi.project.*;
+import com.intellij.openapi.roots.FileIndex;
+import com.intellij.openapi.roots.ProjectFileIndex;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.*;
@@ -39,9 +43,11 @@ import java.util.Objects;
  *
  * @author wibotwi, jansorg, sylvanaar
  */
-public class LuaRunConfigurationProducer extends RunConfigurationProducer<com.sylvanaar.idea.Lua.run.LuaRunConfiguration>  implements Cloneable {
+public class LuaRunConfigurationProducer extends LazyRunConfigurationProducer<com.sylvanaar.idea.Lua.run.LuaRunConfiguration> implements Cloneable {
+    public final LuaRunConfigurationProducer INSTANCE = new LuaRunConfigurationProducer();
+
     public LuaRunConfigurationProducer() {
-        super(LuaConfigurationType.getInstance());
+        super();
     }
 
     @Override
@@ -52,10 +58,11 @@ public class LuaRunConfigurationProducer extends RunConfigurationProducer<com.sy
             VirtualFile file = sourceFile.getVirtualFile();
 
             if (file != null) {
+                final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(context.getProject()).getFileIndex();
+                final VirtualFile dir = fileIndex.getContentRootForFile(file);
+
                 configuration.setName(file.getName());
 
-
-                final VirtualFile dir = context.getProject().getBaseDir();
                 if (dir != null) {
                     configuration.setWorkingDirectory(dir.getPath());
 
@@ -84,5 +91,11 @@ public class LuaRunConfigurationProducer extends RunConfigurationProducer<com.sy
     @Override
     public boolean isConfigurationFromContext(@NotNull LuaRunConfiguration configuration, @NotNull ConfigurationContext context) {
         return false;
+    }
+
+    @NotNull
+    @Override
+    public ConfigurationFactory getConfigurationFactory() {
+        return this.INSTANCE.getConfigurationFactory();
     }
 }

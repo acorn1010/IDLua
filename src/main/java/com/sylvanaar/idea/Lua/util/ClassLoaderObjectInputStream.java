@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectStreamClass;
 import java.io.StreamCorruptedException;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
@@ -96,7 +98,12 @@ public class ClassLoaderObjectInputStream extends ObjectInputStream {
             interfaceClasses[i] = Class.forName(interfaces[i], false, classLoader);
         }
         try {
-            return Proxy.getProxyClass(classLoader, interfaceClasses);
+            return (Class<?>) Proxy.newProxyInstance(classLoader, interfaceClasses, new InvocationHandler() {
+                @Override
+                public Class<?> invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                    return null;
+                }
+            });
         } catch (IllegalArgumentException e) {
             return super.resolveProxyClass(interfaces);
         }

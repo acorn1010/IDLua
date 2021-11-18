@@ -23,7 +23,9 @@ import com.intellij.execution.process.CapturingProcessHandler;
 import com.intellij.execution.process.ProcessOutput;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.util.Key;
@@ -31,6 +33,7 @@ import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.wm.RegisterToolWindowTask;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -154,31 +157,33 @@ public class LuaSystemUtil {
             return;
         }
 
-        toolWindow = manager.registerToolWindow(toolWindowId, true, ToolWindowAnchor.BOTTOM);
+        toolWindow = manager.registerToolWindow(RegisterToolWindowTask.notClosable(toolWindowId, ToolWindowAnchor.BOTTOM));
         final ConsoleView console = new ConsoleViewImpl(project, false);
         project.putUserData(CONSOLE_VIEW_KEY, console);
         toolWindow.getContentManager().addContent(new ContentImpl(console.getComponent(), "", false));
 
         final ToolWindowManagerListener listener = new ToolWindowManagerListener() {
             @Override
-            public void toolWindowRegistered(@NotNull String id) {
+            public void toolWindowsRegistered(@NotNull List<String> ids, @NotNull ToolWindowManager toolWindowManager) {
             }
 
             @Override
-            public void stateChanged() {
-                ToolWindow window = manager.getToolWindow(toolWindowId);
+            public void stateChanged(@NotNull ToolWindowManager toolWindowManager) {
+                ToolWindow window = toolWindowManager.getToolWindow(toolWindowId);
                 if (window != null && !window.isVisible()) {
-                    manager.unregisterToolWindow(toolWindowId);
-                    ((ToolWindowManagerEx) manager).removeToolWindowManagerListener(this);
+//                    ((ToolWindowManagerEx) toolWindowManager).removeToolWindowManagerListener(listener);
+                    window.hide();
                 }
             }
         };
 
-        toolWindow.show(new Runnable() {
-            @Override
-            public void run() {
-                ((ToolWindowManagerEx) manager).addToolWindowManagerListener(listener);
-            }
-        });
+//        toolWindow.show(new Runnable() {
+//            @Override
+//            public void run() {
+//                ((ToolWindowManagerEx) manager).addToolWindowManagerListener(listener);
+//            }
+//        });
+
+        toolWindow.show();
     }
 }

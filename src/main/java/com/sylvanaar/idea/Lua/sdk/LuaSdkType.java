@@ -70,11 +70,6 @@ public class LuaSdkType extends SdkType {
         return null;
     }
 
-    @Override @NotNull
-    public Icon getIconForAddAction() {
-        return getIcon();
-    }
-
     @Nullable
     public String suggestHomePath() {
         if (SystemInfo.isWindows) {

@@ -56,7 +56,7 @@ public class LuaConfigurationType implements ConfigurationType {
     }
 
     public static LuaConfigurationType getInstance() {
-        return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), LuaConfigurationType.class);
+        return ContainerUtil.findInstance(CONFIGURATION_TYPE_EP.getExtensionList(), LuaConfigurationType.class);
     }
 
     public ConfigurationFactory[] getConfigurationFactories() {

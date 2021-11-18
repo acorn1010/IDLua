@@ -83,7 +83,7 @@ public class LuaRefactoringUtil {
     if (element2 == null || element1 == null) return null;
     final PsiElement commonParent = PsiTreeUtil.findCommonParent(element1, element2);
     assert commonParent != null;
-    final T element = ReflectionCache.isAssignable(klass, commonParent.getClass())
+    final T element = klass == commonParent.getClass() || klass.isAssignableFrom(commonParent.getClass())
         ? (T) commonParent : PsiTreeUtil.getParentOfType(commonParent, klass);
     if (element == null || element.getTextRange().getStartOffset() != startOffset) {
       return null;

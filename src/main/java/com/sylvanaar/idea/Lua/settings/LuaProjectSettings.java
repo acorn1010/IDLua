@@ -18,14 +18,15 @@
 
 package com.sylvanaar.idea.Lua.settings;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.*;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 
 @State(
         name = "LuaProjectSettings",
         storages = {
-                @Storage(file = "$PROJECT_FILE$"),
-                @Storage(file = "$PROJECT_CONFIG_DIR$/Lua_project.xml")}
+                @Storage(value = "$PROJECT_FILE$"),
+                @Storage(value = "$PROJECT_CONFIG_DIR$/Lua_project.xml")}
 )
 public class LuaProjectSettings implements PersistentStateComponent<LuaProjectSettings> {
 
@@ -38,6 +39,6 @@ public class LuaProjectSettings implements PersistentStateComponent<LuaProjectSe
     }
 
     public static LuaProjectSettings getInstance() {
-        return ServiceManager.getService(LuaProjectSettings.class);
+        return ApplicationManager.getApplication().getService(LuaProjectSettings.class);
     }
 }

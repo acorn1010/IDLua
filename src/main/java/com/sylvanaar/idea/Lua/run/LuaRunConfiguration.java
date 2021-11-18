@@ -52,7 +52,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LuaRunConfiguration extends ModuleBasedConfiguration<RunConfigurationModule, Element> implements CommonLuaRunConfigurationParams, LuaRunConfigurationParams {
+public class LuaRunConfiguration extends ModuleBasedConfiguration<RunConfigurationModule, Element> implements CommonLuaRunConfigurationParams, LuaRunConfigurationParams, RunProfileWithCompileBeforeLaunchOption {
     static Logger log = Logger.getLogger(LuaRunConfiguration.class);
 
     // common config
@@ -80,7 +80,7 @@ public class LuaRunConfiguration extends ModuleBasedConfiguration<RunConfigurati
     }
 
     @Override
-    public boolean excludeCompileBeforeLaunchOption() {
+    public boolean isExcludeCompileBeforeLaunchOption() {
         return true;
     }
 
@@ -322,10 +322,4 @@ public class LuaRunConfiguration extends ModuleBasedConfiguration<RunConfigurati
         Module[] allModules = ModuleManager.getInstance(getProject()).getModules();
         return Arrays.asList(allModules);
     }
-
-    @Override
-    protected ModuleBasedConfiguration createInstance() {
-        return new LuaRunConfiguration(getConfigurationModule(), getFactory(), getName());
-    }
-
 }
