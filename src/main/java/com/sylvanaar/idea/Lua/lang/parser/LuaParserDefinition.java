@@ -25,6 +25,7 @@ import com.intellij.psi.tree.*;
 import com.sylvanaar.idea.Lua.lang.lexer.*;
 import com.sylvanaar.idea.Lua.lang.parser.kahlua.*;
 import com.sylvanaar.idea.Lua.lang.psi.impl.*;
+import com.sylvanaar.idea.Lua.lang.psi.stubs.LuaFileStub;
 import com.sylvanaar.idea.Lua.lang.psi.stubs.elements.*;
 import org.jetbrains.annotations.*;
 
@@ -37,7 +38,7 @@ import static com.sylvanaar.idea.Lua.lang.parser.LuaElementTypes.*;
  * Time: 14:39:39
  */
 public class LuaParserDefinition implements ParserDefinition {
-    public static final IStubFileElementType LUA_FILE = new LuaStubFileElementType();
+    public static final IStubFileElementType<LuaFileStub> LUA_FILE = new LuaStubFileElementType();
     //public static final IFileElementType LUA_FILE = new IFileElementType("Lua Script", LuaFileType.LUA_LANGUAGE);
 
     @NotNull

@@ -27,9 +27,9 @@ public class LuaFileType extends LanguageFileType {
     public static final String DEFAULT_EXTENSION = "lua";
     public static final String LUA = "Lua";
     public static final String LUA_PLUGIN_ID = LUA;
-    public static final LuaLanguage LUA_LANGUAGE = new LuaLanguage();
+    public static final LuaLanguage LUA_LANGUAGE = LuaLanguage.INSTANCE;
 
-    public static final FileType getFileType() { return LUA_LANGUAGE.getAssociatedFileType(); }
+    public static FileType getFileType() { return LUA_LANGUAGE.getAssociatedFileType(); }
 
     public static final ExtensionFileNameMatcher[] EXTENSION_FILE_NAME_MATCHERS = {
             new ExtensionFileNameMatcher(LuaFileType.DEFAULT_EXTENSION),
