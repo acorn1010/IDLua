@@ -16,7 +16,8 @@
 package com.sylvanaar.idea.Lua.editor.inspections;
 
 import com.intellij.codeHighlighting.HighlightDisplayLevel;
-import com.intellij.codeInsight.daemon.impl.actions.AbstractSuppressByNoInspectionCommentFix;
+import com.intellij.codeInsight.daemon.impl.actions.AbstractBatchSuppressByNoInspectionCommentFix;
+import com.intellij.codeInsight.daemon.impl.actions.SuppressByCommentFix;
 import com.intellij.codeInspection.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Computable;
@@ -101,21 +102,23 @@ public abstract class AbstractInspection extends LocalInspectionTool
         @Nullable
     PsiElement element) {
         return new SuppressIntentionAction[] {
-            new AbstractSuppressByNoInspectionCommentFix(getID(), false) {
-                    @Nullable
-                    @Override
-                    protected PsiElement getContainer(PsiElement context) {
-                        return PsiTreeUtil.getParentOfType(context,
-                                LuaStatementElement.class);
-                    }
-
-                    @NotNull
-                    @Override
-                    public String getText() {
-                        return InspectionsBundle.message(
-                            "suppress.inspection.statement");
-                    }
-                }
+            // FIXME(acorn1010): This is supposed to work, but uh... doesn't.
+//            new AbstractBatchSuppressByNoInspectionCommentFix(getID(), false) {
+//
+//                @Nullable
+//                @Override
+//                public PsiElement getContainer(PsiElement context) {
+//                    return PsiTreeUtil.getParentOfType(context,
+//                            LuaStatementElement.class);
+//                }
+//
+//                @NotNull
+//                @Override
+//                public String getText() {
+//                    return InspectionsBundle.message(
+//                        "suppress.inspection.statement");
+//                }
+//            }
         };
     }
 

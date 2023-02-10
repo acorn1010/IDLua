@@ -65,10 +65,6 @@
     <level value="debug"/>
     <appender-ref ref="LUA_FILE"/>
   </logger>
-  <logger name="idea.plugin.psiviewer" additivity="false">
-    <level value="debug"/>
-    <appender-ref ref="LUA_FILE"/>
-  </logger>
   <logger name="Lua" additivity="false">
     <level value="debug"/>
     <appender-ref ref="LUA_FILE"/>

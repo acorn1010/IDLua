@@ -85,9 +85,10 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
     }
 
     @Override
-    public boolean submit(@NotNull IdeaLoggingEvent[] events, @Nullable String additionalInfo,
-                          @NotNull Component parentComponent, @NotNull Consumer<SubmittedReportInfo> consumer) {
-        return submit(events, additionalInfo, "<anonymous>", parentComponent, consumer);
+    public boolean submit(@NotNull IdeaLoggingEvent @NotNull [] events, @Nullable String additionalInfo,
+                          @NotNull Component parentComponent, @NotNull Consumer<? super SubmittedReportInfo> consumer) {
+        return submit(events, additionalInfo, "<anonymous>", parentComponent,
+            (Consumer<SubmittedReportInfo>) consumer);
     }
 
     private boolean submit(IdeaLoggingEvent[] ideaLoggingEvents, String description, String user,
@@ -126,6 +127,7 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
 
         Throwable t = ideaLoggingEvent.getThrowable();
         if (t != null) {
+            //noinspection removal
             final PluginId pluginId = IdeErrorsDialog.findPluginId(t);
             if (pluginId != null) {
                 final IdeaPluginDescriptor ideaPluginDescriptor = PluginManager.getPlugin(pluginId);
@@ -403,6 +405,7 @@ public class YouTrackBugReporter extends ErrorReportSubmitter {
                         notification.expire();
                     }
                 } : null;
+                //noinspection UnstableApiUsage,removal
                 ReportMessages.GROUP.createNotification(ReportMessages.ERROR_REPORT, text.toString(), type,
                         listener).notify(project);
             }

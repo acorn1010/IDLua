@@ -5,6 +5,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.sylvanaar.idea.Lua.LuaFileType;
@@ -75,7 +76,7 @@ public class LuaSpacingProcessor extends LuaElementVisitor {
    */
   private static class MyLuaSpacingVisitor extends LuaElementVisitor {
     private PsiElement myParent;
-    private final CodeStyleSettings mySettings;
+    private final CommonCodeStyleSettings mySettings;
 
     private Spacing myResult;
     private ASTNode myChild1;

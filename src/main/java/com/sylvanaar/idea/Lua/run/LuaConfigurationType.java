@@ -52,7 +52,7 @@ public class LuaConfigurationType implements ConfigurationType {
 
     @NotNull
     public String getId() {
-        return "#com.sylvanaar.idea.Lua.run.LuaConfigurationType";
+        return "Lua Script";
     }
 
     public static LuaConfigurationType getInstance() {
